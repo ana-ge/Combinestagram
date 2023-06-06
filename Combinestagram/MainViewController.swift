@@ -70,6 +70,13 @@ class MainViewController: UIViewController {
       .disposed(by: disposeBag)
     
     navigationController!.pushViewController(photosViewController, animated: true)
+    
+    newPhotos
+      .ignoreElements()
+      .subscribe(onCompleted: { [weak self] in
+        self?.updateNavigationIcon()
+      })
+      .disposed(by: disposeBag)
 
   }
 
@@ -84,5 +91,17 @@ class MainViewController: UIViewController {
     buttonClear.isEnabled = photos.count > 0
     itemAdd.isEnabled = photos.count < 6
     title = photos.count > 0 ? "\(photos.count) photos" : "Collage"
+  }
+  
+  private func updateNavigationIcon() {
+    let icon = imagePreview.image?
+      .scaled(CGSize(width: 22, height: 22))
+      .withRenderingMode(.alwaysOriginal)
+    
+    navigationItem.leftBarButtonItem = UIBarButtonItem(
+      image: icon,
+      style: .done,
+      target: nil,
+      action: nil)
   }
 }
