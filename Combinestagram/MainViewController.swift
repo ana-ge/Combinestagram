@@ -31,6 +31,7 @@ class MainViewController: UIViewController {
   
   @IBAction func actionClear() {
     images.accept([])
+    imageCache = []
 
   }
 
@@ -59,6 +60,14 @@ class MainViewController: UIViewController {
     newPhotos
       .filter { newImage in
         return newImage.size.width > newImage.size.height //only landscapes
+      }
+      .filter { [weak self] newImage in
+        let len = newImage.pngData()?.count ?? 0
+        guard self?.imageCache.contains(len) == false else {
+          return false
+        }
+        self?.imageCache.append(len)
+        return true
       }
       .subscribe(
         onNext: { [weak self] newImage in
