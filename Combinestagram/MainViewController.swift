@@ -54,7 +54,10 @@ class MainViewController: UIViewController {
 //    images.accept(newImages)
     let photosViewController = storyboard!.instantiateViewController(withIdentifier: "PhotosViewController") as! PhotosViewController
     
-    photosViewController.selectedPhotos
+    let newPhotos = photosViewController.selectedPhotos
+      .share()
+    
+    newPhotos
       .subscribe(
         onNext: { [weak self] newImage in
           guard let images = self?.images else { return }
